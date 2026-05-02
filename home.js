@@ -52,6 +52,28 @@ async function fetchProducts() {
             description.textContent = product.description;
             card.appendChild(description);
 
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'delete-btn';
+            deleteBtn.textContent = 'Delete';
+            deleteBtn.onclick = async () => {
+                if (confirm('Are you sure you want to delete this product?')) {
+                    try {
+                        const res = await fetch(`http://localhost:5000/api/products/${product.id}`, {
+                            method: 'DELETE'
+                        });
+                        if (res.ok) {
+                            card.remove();
+                        } else {
+                            alert('Failed to delete product.');
+                        }
+                    } catch (err) {
+                        console.error('Error deleting product', err);
+                        alert('An error occurred while deleting.');
+                    }
+                }
+            };
+            card.appendChild(deleteBtn);
+
             container.appendChild(card);
         });
         
